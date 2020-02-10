@@ -1,0 +1,32 @@
+{
+  "manifest_version": 2,
+  "name": "tuhu worktime calculator",
+  "version": "1.0.0",
+
+  "description": "tuhu worktime calculator",
+  "icons": {
+    "16": "images/icon32.png",
+    "48": "images/icon48.png",
+    "128": "images/icon48.png"
+  },
+
+  "browser_action": {
+    "default_icon": "images/icon48.png",
+    "default_title": "tuhu worktime calculator",
+    "default_popup": "popup.html"
+  },
+
+  "background": {
+    "scripts": ["js/background.js"],
+    "persistent": false
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://tuhu.peoplus.cn/web"],
+      "js": ["js/worktime.js"]
+    }
+  ],
+  "permissions": [
+    "tabs", "storage", "http://*/*", "https://*/*"
+  ]
+}
