@@ -18,8 +18,15 @@ const interval = setInterval(() => {
     [...data].forEach(item => {
       const workDate = item.querySelector('td[data-field="title"]').innerText;
       const workMonth = workDate.substr(0, 7);
-      const startTime = item.querySelector('td[data-field="clock_in_time"]').innerText;
-      const endTime = item.querySelector('td[data-field="clock_out_time"]').innerText;
+      let startTime = item.querySelector('td[data-field="clock_in_time"]').innerText;
+      let endTime = item.querySelector('td[data-field="clock_out_time"]').innerText;
+
+      if (!startTime || !endTime) return; // 考勤异常
+
+      startTime = new Date(startTime).getTime();
+      endTime = new Date(endTime).getTime();
+
+      if (endTime - startTime < 9 * 60 * 60 * 1e3) return; // 考勤异常
 
       if (curMonth === workMonth) {
         workedDays++;
@@ -38,13 +45,7 @@ const interval = setInterval(() => {
     });
 
     function getWorkedHours(startTime, endTime) {
-      if (startTime && endTime) {
-        let diff = new Date(endTime).getTime() - new Date(startTime).getTime();
-        diff = diff/1e3/60/60;
-        return diff > 9 ? diff : 9;
-      } else {
-        return 9;
-      }
+      return (endTime - startTime) / (60 * 60 * 1e3);
     }
 
     function fillPreZero(str) {
